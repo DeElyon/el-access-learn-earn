@@ -1,4 +1,3 @@
-
 import React, { useState, Suspense, useRef, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text3D, Center, Float, PerspectiveCamera } from '@react-three/drei';
@@ -58,7 +57,8 @@ const RotatingCubes = ({ count = 20, spread = 7 }) => {
 };
 
 const FloatingLogo = () => {
-  const mesh = useRef();
+  // Fix: properly type the mesh ref to THREE.Mesh
+  const mesh = useRef<THREE.Group>(null);
   
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
