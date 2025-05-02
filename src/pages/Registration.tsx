@@ -1,5 +1,4 @@
-
-import React, { useState, Suspense, useRef, useEffect } from 'react';
+import React, { useState, Suspense, useRef, useEffect, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text3D, Center, Float, PerspectiveCamera, useTexture, Sphere } from '@react-three/drei';
 import { toast } from '@/hooks/use-toast';
