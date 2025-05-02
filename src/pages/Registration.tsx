@@ -9,13 +9,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Check, Calendar, CreditCard, FileText, Mail, Copy, Timer, User, Clock } from 'lucide-react';
+import { Check, Calendar, CreditCard, FileText, Mail, Copy, Timer, User, Clock, Loader } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import * as THREE from 'three';
 import { generateRandomId } from '@/utils/id-generator';
 import { PaymentTimer } from '@/components/PaymentTimer';
 import { Receipt } from '@/components/Receipt';
+import { Progress } from '@/components/ui/progress';
 
 // 3D Components
 const RotatingCubes = ({ count = 20, spread = 7 }) => {
@@ -176,11 +177,42 @@ const RegistrationForm = () => {
   const [showReceipt, setShowReceipt] = useState(false);
   const [timerExpired, setTimerExpired] = useState(false);
   const [paymentStarted, setPaymentStarted] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState(false);
+  const [paymentProgress, setPaymentProgress] = useState(0);
 
   // Generate UserId when component mounts
   useEffect(() => {
     setUserId(generateRandomId());
   }, []);
+
+  // Payment progress effect
+  useEffect(() => {
+    let interval;
+    
+    if (processingPayment) {
+      // Start with 0% progress
+      setPaymentProgress(0);
+      
+      // Update progress every 300ms to complete in 30 seconds
+      interval = setInterval(() => {
+        setPaymentProgress(prev => {
+          const newProgress = prev + (100 / (30000 / 300));
+          return newProgress >= 100 ? 100 : newProgress;
+        });
+      }, 300);
+      
+      // Complete payment after 30 seconds
+      const timer = setTimeout(() => {
+        setProcessingPayment(false);
+        completePayment();
+      }, 30000);
+      
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timer);
+      };
+    }
+  }, [processingPayment]);
 
   // Course data organized by category
   const courseData = {
@@ -283,11 +315,8 @@ const RegistrationForm = () => {
     setTimerExpired(false);
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
+  // Complete payment after processing
+  const completePayment = () => {
     // Create receipt data
     const selectedCourse = courseData[courseCategory]?.courses.find(c => c.id === course) || 
                          { name: `${courseData[courseCategory]?.name} Bundle`, price: courseData[courseCategory]?.bundlePrice };
@@ -308,20 +337,17 @@ const RegistrationForm = () => {
       transactionId: `T${Date.now().toString(36).toUpperCase()}`
     };
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setReceiptData(receipt);
-      
-      toast({
-        title: "Registration Successful!",
-        description: "Thank you for registering! Your receipt has been generated.",
-      });
-      
-      // Reset form or redirect
-      setStep('confirmation');
-      setShowReceipt(true);
-    }, 1500);
+    setIsSubmitting(false);
+    setReceiptData(receipt);
+    
+    toast({
+      title: "Registration Successful!",
+      description: "Thank you for registering! Your receipt has been generated.",
+    });
+    
+    // Reset form or redirect
+    setStep('confirmation');
+    setShowReceipt(true);
   };
 
   // Get course price
@@ -426,21 +452,21 @@ const RegistrationForm = () => {
           <CardContent className="p-6">
             <Tabs value={step} className="w-full">
               <TabsList className="grid w-full grid-cols-4 mb-8">
-                <TabsTrigger value="personal" onClick={() => setStep('personal')} disabled={isSubmitting}>
+                <TabsTrigger value="personal" onClick={() => setStep('personal')} disabled={isSubmitting || processingPayment}>
                   <div className="flex items-center">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-2 
                       ${step === 'personal' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>1</div>
                     <span className="hidden sm:inline">Personal Info</span>
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="course" onClick={() => setStep('course')} disabled={isSubmitting}>
+                <TabsTrigger value="course" onClick={() => setStep('course')} disabled={isSubmitting || processingPayment}>
                   <div className="flex items-center">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-2
                       ${step === 'course' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>2</div>
                     <span className="hidden sm:inline">Course</span>
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="payment" onClick={() => setStep('payment')} disabled={isSubmitting}>
+                <TabsTrigger value="payment" onClick={() => setStep('payment')} disabled={isSubmitting || processingPayment}>
                   <div className="flex items-center">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-2
                       ${step === 'payment' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>3</div>
@@ -641,6 +667,30 @@ const RegistrationForm = () => {
                     </div>
                   )}
 
+                  {processingPayment && (
+                    <div className="bg-green-50 dark:bg-green-900/30 p-6 border border-green-200 dark:border-green-800 rounded-md">
+                      <div className="text-center space-y-4">
+                        <div className="flex justify-center">
+                          <div className="animate-spin relative w-14 h-14 flex justify-center items-center">
+                            <Loader className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                          </div>
+                        </div>
+                        <h3 className="text-lg font-medium text-green-800 dark:text-green-300">Processing Payment</h3>
+                        <p className="text-sm text-green-700 dark:text-green-400">
+                          Please wait while we process your payment. This should take about 30 seconds.
+                        </p>
+                        <div className="w-full mt-4">
+                          <Progress value={paymentProgress} className="w-full h-2" />
+                          <div className="flex justify-between items-center mt-1">
+                            <span className="text-xs text-green-600 dark:text-green-400">Starting</span>
+                            <span className="text-xs text-green-600 dark:text-green-400">{Math.round(paymentProgress)}%</span>
+                            <span className="text-xs text-green-600 dark:text-green-400">Complete</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-4">
                     <div className="rounded-md bg-blue-50 dark:bg-blue-900/30 p-4 border border-blue-200 dark:border-blue-800">
                       <div className="flex items-center">
@@ -685,7 +735,7 @@ const RegistrationForm = () => {
                     
                     <div className="space-y-2">
                       <Label htmlFor="paymentMethod">Payment Method Used</Label>
-                      <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                      <Select value={paymentMethod} onValueChange={setPaymentMethod} disabled={processingPayment}>
                         <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                           <SelectValue placeholder="Select payment method" />
                         </SelectTrigger>
@@ -725,23 +775,23 @@ const RegistrationForm = () => {
                       type="button"
                       variant="outline"
                       onClick={() => setStep('course')}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || processingPayment}
                       className="flex-1"
                     >
                       Back
                     </Button>
                     <Button
                       type="submit"
-                      disabled={!paymentMethod || isSubmitting || timerExpired || !paymentStarted}
+                      disabled={!paymentMethod || isSubmitting || timerExpired || !paymentStarted || processingPayment}
                       className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white"
                     >
-                      {isSubmitting ? (
+                      {isSubmitting || processingPayment ? (
                         <div className="flex items-center">
                           <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
-                          Submitting...
+                          {processingPayment ? "Processing..." : "Submitting..."}
                         </div>
                       ) : "Complete Registration"}
                     </Button>
