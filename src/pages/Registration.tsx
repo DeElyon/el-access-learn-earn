@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Check, Calendar, CreditCard, FileText, Mail, Phone } from 'lucide-react';
+import { Check, Calendar, CreditCard, FileText, Mail } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import * as THREE from 'three';
@@ -27,10 +27,12 @@ const RotatingCubes = ({ count = 20, spread = 7 }) => {
   useFrame((state) => {
     for (let i = 0; i < meshes.current.length; i++) {
       const mesh = meshes.current[i];
-      const time = state.clock.getElapsedTime();
-      mesh.rotation.x = Math.sin(time * 0.2) * 0.4;
-      mesh.rotation.y = Math.sin(time * 0.4) * 0.4;
-      mesh.position.y = Math.sin(time * 0.5 + i) * 0.5;
+      if (mesh) {
+        const time = state.clock.getElapsedTime();
+        mesh.rotation.x = Math.sin(time * 0.2) * 0.4;
+        mesh.rotation.y = Math.sin(time * 0.4) * 0.4;
+        mesh.position.y = Math.sin(time * 0.5 + i) * 0.5;
+      }
     }
   });
 
@@ -46,7 +48,11 @@ const RotatingCubes = ({ count = 20, spread = 7 }) => {
       scale={0.2 + Math.random() * 0.3}
     >
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={colors[i % colors.length]} metalness={0.5} roughness={0.2} />
+      <meshStandardMaterial 
+        color={colors[i % colors.length]}
+        metalness={0.5}
+        roughness={0.2}
+      />
     </mesh>
   ));
 };
@@ -56,8 +62,10 @@ const FloatingLogo = () => {
   
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    mesh.current.rotation.y = time * 0.3;
-    mesh.current.position.y = Math.sin(time * 0.5) * 0.2;
+    if (mesh.current) {
+      mesh.current.rotation.y = time * 0.3;
+      mesh.current.position.y = Math.sin(time * 0.5) * 0.2;
+    }
   });
 
   return (
@@ -75,7 +83,11 @@ const FloatingLogo = () => {
           bevelSegments={5}
         >
           {"EL ACCESS 2.0"}
-          <meshStandardMaterial color="#3498db" metalness={0.8} roughness={0.2} />
+          <meshStandardMaterial 
+            color="#3498db" 
+            metalness={0.8} 
+            roughness={0.2} 
+          />
         </Text3D>
       </Center>
     </Float>
@@ -603,4 +615,3 @@ const RegistrationForm = () => {
 };
 
 export default RegistrationForm;
-
