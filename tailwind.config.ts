@@ -63,8 +63,16 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				elblue: '#3498db',
-				ashwhite: '#f2f2f2',
+				elblue: 'hsl(var(--elblue))',
+				'elblue-light': 'hsl(var(--elblue-light))',
+				'elblue-dark': 'hsl(var(--elblue-dark))',
+				elgray: 'hsl(var(--elgray))',
+                protocol: {
+                    blue: '#066893',
+                    dark: '#044E70',
+                    light: '#2389B0',
+                    accent: '#065F85'
+                }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -73,6 +81,7 @@ export default {
 			},
 			fontFamily: {
 				sans: ['Open Sans', 'sans-serif'],
+                poppins: ['Poppins', 'sans-serif']
 			},
 			keyframes: {
 				'accordion-down': {

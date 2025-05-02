@@ -1,5 +1,5 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,6 +7,7 @@
 
 @layer base {
   :root {
+    /* Protocol-based theme system - Light mode */
     --background: 204 33% 97%;
     --foreground: 210 20% 15%;
 
@@ -16,24 +17,24 @@
     --popover: 0 0% 100%;
     --popover-foreground: 210 20% 15%;
 
-    --primary: 204 70% 53%;
+    --primary: 200 70% 35%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 10% 96%;
-    --secondary-foreground: 204 70% 53%;
+    --secondary: 200 70% 45%;
+    --secondary-foreground: 210 40% 98%;
 
     --muted: 210 10% 92%;
     --muted-foreground: 210 10% 40%;
 
-    --accent: 204 70% 93%;
-    --accent-foreground: 204 70% 40%;
+    --accent: 200 70% 93%;
+    --accent-foreground: 200 70% 40%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 210 20% 90%;
     --input: 210 20% 90%;
-    --ring: 204 70% 53%;
+    --ring: 200 70% 35%;
 
     --radius: 0.5rem;
 
@@ -45,9 +46,16 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* ELCODERS brand colors */
+    --elblue: 200 70% 35%;
+    --elblue-light: 200 70% 45%;
+    --elblue-dark: 200 80% 25%;
+    --elgray: 0 0% 95%;
   }
 
   .dark {
+    /* Protocol-based theme system - Dark mode */
     --background: 210 30% 8%;
     --foreground: 210 15% 90%;
 
@@ -57,16 +65,16 @@
     --popover: 210 30% 12%;
     --popover-foreground: 210 15% 90%;
 
-    --primary: 204 70% 43%;
+    --primary: 200 70% 43%;
     --primary-foreground: 210 15% 95%;
 
-    --secondary: 210 30% 16%;
+    --secondary: 200 70% 33%;
     --secondary-foreground: 210 15% 90%;
 
     --muted: 210 30% 20%;
     --muted-foreground: 210 15% 70%;
 
-    --accent: 204 70% 25%;
+    --accent: 200 70% 25%;
     --accent-foreground: 210 15% 90%;
 
     --destructive: 0 62.8% 45%;
@@ -74,7 +82,7 @@
 
     --border: 210 30% 25%;
     --input: 210 30% 25%;
-    --ring: 204 70% 43%;
+    --ring: 200 70% 43%;
     
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -84,6 +92,12 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* ELCODERS brand colors - dark mode */
+    --elblue: 200 70% 43%;
+    --elblue-light: 200 70% 53%;
+    --elblue-dark: 200 80% 33%;
+    --elgray: 0 0% 20%;
   }
 }
 
@@ -94,6 +108,10 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins;
   }
   
   .hover-scale {
@@ -117,6 +135,18 @@
   }
   
   .hero-gradient {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+  }
+
+  .elcoders-gradient {
+    background: linear-gradient(135deg, hsl(var(--elblue)) 0%, hsl(var(--elblue-light)) 50%, hsl(var(--elblue)) 100%);
+  }
+
+  .protocol-card {
+    @apply bg-white dark:bg-card rounded-xl border border-border p-6 transition-all duration-300;
+  }
+
+  .protocol-card:hover {
+    @apply shadow-lg border-primary/30 dark:border-primary/40;
   }
 }
