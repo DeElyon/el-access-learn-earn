@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { Download, FileText } from 'lucide-react';
+import { Download, FileText, Receipt as ReceiptIcon } from 'lucide-react';
 
 interface ReceiptData {
   receiptId: string;
@@ -72,13 +72,13 @@ export const Receipt: React.FC<ReceiptProps> = ({ receiptData }) => {
           .header {
             text-align: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid #4f46e5;
             padding-bottom: 10px;
           }
           .logo {
             font-size: 24px;
             font-weight: bold;
-            color: #3498db;
+            color: #4f46e5;
           }
           .receipt-id {
             font-size: 18px;
@@ -116,8 +116,13 @@ export const Receipt: React.FC<ReceiptProps> = ({ receiptData }) => {
             padding: 5px 10px;
             border-radius: 4px;
             display: inline-block;
-            background-color: #4CAF50;
+            background-color: #10b981;
             color: white;
+          }
+          .with-love {
+            color: #4f46e5;
+            font-style: italic;
+            margin-top: 10px;
           }
         </style>
       </head>
@@ -165,6 +170,7 @@ export const Receipt: React.FC<ReceiptProps> = ({ receiptData }) => {
           <div class="footer">
             <p>Thank you for registering with EL ACCESS 2.0!</p>
             <p>If you have any questions, please contact us at elcoderssoftwares12@gmail.com or WhatsApp: 08088578817</p>
+            <p class="with-love">With ❤️ by ELCODERS SOFTWARE DEVELOPING COMPANY. FOUNDER IS C.E.O ELYON.</p>
           </div>
         </div>
       </body>
@@ -181,48 +187,51 @@ export const Receipt: React.FC<ReceiptProps> = ({ receiptData }) => {
   };
   
   return (
-    <Card className="border border-gray-200 shadow-md mt-4 max-w-2xl mx-auto bg-white dark:bg-gray-800">
+    <Card className="border border-gray-200 shadow-md mt-4 max-w-2xl mx-auto bg-white dark:bg-gray-800 animate-scale-in">
       <CardContent className="p-6">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400">EL ACCESS 2.0</h2>
+            <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">EL ACCESS 2.0</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">Official Receipt</p>
           </div>
-          <div className="text-right">
-            <p className="text-sm font-semibold">Receipt #{receiptData.receiptId}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(receiptData.date)}</p>
+          <div className="text-right flex items-center">
+            <ReceiptIcon className="h-6 w-6 mr-2 text-indigo-500 animate-pulse" />
+            <div>
+              <p className="text-sm font-semibold">Receipt #{receiptData.receiptId}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(receiptData.date)}</p>
+            </div>
           </div>
         </div>
         
         <Separator className="my-4" />
         
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
+          <div className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
             <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Student Information</h3>
             <p className="text-sm mt-1">{receiptData.customerName}</p>
             <p className="text-sm">{receiptData.customerEmail}</p>
             <p className="text-sm">{receiptData.customerPhone}</p>
             <p className="text-sm">User ID: <span className="font-mono">{receiptData.userId}</span></p>
           </div>
-          <div>
+          <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
             <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Transaction Details</h3>
             <p className="text-sm mt-1">Transaction ID: {receiptData.transactionId}</p>
             <p className="text-sm">Payment Method: {getPaymentMethodDisplay(receiptData.paymentMethod)}</p>
             <p className="text-sm">
               Status: 
-              <span className="ml-1 inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+              <span className="ml-1 inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
                 {receiptData.status}
               </span>
             </p>
           </div>
         </div>
         
-        <div className="my-6">
+        <div className="my-6 animate-fade-in" style={{ animationDelay: "0.3s" }}>
           <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Course Information</h3>
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
+                <FileText className="h-5 w-5 mr-2 text-indigo-600 dark:text-indigo-400" />
                 <p className="font-medium">{receiptData.course}</p>
               </div>
               <p className="font-bold text-lg">{receiptData.amount}</p>
@@ -234,13 +243,13 @@ export const Receipt: React.FC<ReceiptProps> = ({ receiptData }) => {
         
         <div className="mt-6 flex justify-between items-center">
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            Thank you for choosing EL ACCESS 2.0
+            With ❤️ by ELCODERS SOFTWARE DEVELOPING COMPANY
           </p>
           <Button 
             variant="outline" 
             size="sm" 
             onClick={handleDownload} 
-            className="flex items-center text-blue-600 hover:text-blue-800"
+            className="flex items-center text-indigo-600 hover:text-indigo-800 animate-pulse hover:animate-none"
           >
             <Download className="h-4 w-4 mr-1" />
             Download

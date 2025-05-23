@@ -287,10 +287,28 @@ const RegistrationForm = () => {
   // Bank account details
   const bankAccounts = [
     { bank: 'Access Bank', number: '1907856695', name: 'Ebubechukwu Ifeanyi Elijah' },
-    { bank: 'Stanbic IBTC', number: '5190766096', name: 'Ebubechukwu Ifeanyi' },
-    { bank: 'Kuda MFB', number: '2071073143', name: 'Onoha Ifeanyichukwu Happiness' },
+    { bank: 'SMARTCASH PAYMENT SERVICE BANK', number: '8088578817', name: 'ELCODERS SOFTWARE DEVELOPING COMPANY' }
   ];
 
+  // Handle form submission
+  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    if (!paymentMethod || timerExpired || !paymentStarted) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please select a payment method and ensure your payment timer is active.",
+      });
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setProcessingPayment(true);
+    
+    // Processing will be handled by the useEffect
+  };
+  
   // Handle start payment timer
   const startPaymentTimer = () => {
     if (!paymentStarted) {
@@ -388,18 +406,18 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-indigo-950 dark:to-blue-950 
+    <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-indigo-950 dark:to-blue-950 
                     min-h-screen flex flex-col">
       <Navbar isDarkMode={false} toggleDarkMode={() => {}} />
       
       <div className="pt-16 pb-8 relative overflow-hidden">
-        <div className="absolute -top-10 left-0 w-full h-80 bg-gradient-to-r from-blue-500/20 via-purple-500/30 to-indigo-500/20 blur-3xl transform -rotate-12 z-0" />
+        <div className="absolute -top-10 left-0 w-full h-80 bg-gradient-to-r from-indigo-500/20 via-purple-500/30 to-blue-500/20 blur-3xl transform -rotate-12 z-0" />
         
         <div className="w-full h-72 relative z-10">
           <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
             <ambientLight intensity={0.6} />
             <directionalLight intensity={1.2} position={[10, 10, 10]} />
-            <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff00ff" />
+            <pointLight position={[-10, -10, -10]} intensity={0.5} color="#7c3aed" />
             <Suspense fallback={null}>
               <PerspectiveCamera makeDefault position={[0, 0, 5]} />
               <FloatingLogo />
@@ -411,7 +429,7 @@ const RegistrationForm = () => {
         </div>
         
         <div className="mt-8 md:mt-10 relative z-20">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 mb-3 animate-pulse-light">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 mb-3 animate-pulse">
             Register for EL ACCESS 2.0
           </h1>
           <p className="text-gray-600 dark:text-gray-300 text-center max-w-3xl mx-auto text-lg animate-fade-in">
@@ -423,22 +441,22 @@ const RegistrationForm = () => {
       
       <main className="flex-grow container mx-auto px-4 animate-fade-in relative z-20 mb-16">
         <Card className="max-w-3xl mx-auto border-0 shadow-xl bg-white/90 backdrop-blur-lg dark:bg-gray-800/90 overflow-hidden rounded-xl">
-          <CardHeader className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white">
+          <CardHeader className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-2xl">Course Registration</CardTitle>
-                <CardDescription className="text-blue-100">Fill out the form below to enroll in our courses</CardDescription>
+                <CardDescription className="text-indigo-100">Fill out the form below to enroll in our courses</CardDescription>
               </div>
               <div className="bg-white/20 backdrop-blur-md rounded-lg p-3">
                 <div className="flex items-center">
-                  <User className="h-5 w-5 mr-2 text-blue-100" />
+                  <User className="h-5 w-5 mr-2 text-indigo-100" />
                   <div>
-                    <div className="text-xs text-blue-100">User ID</div>
+                    <div className="text-xs text-indigo-100">User ID</div>
                     <div className="flex items-center">
                       <span className="text-sm font-mono font-bold">{userId}</span>
                       <button 
                         onClick={copyUserId} 
-                        className="ml-2 text-blue-100 hover:text-white"
+                        className="ml-2 text-indigo-100 hover:text-white"
                       >
                         <Copy className="h-4 w-4" />
                       </button>
@@ -455,21 +473,21 @@ const RegistrationForm = () => {
                 <TabsTrigger value="personal" onClick={() => setStep('personal')} disabled={isSubmitting || processingPayment}>
                   <div className="flex items-center">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-2 
-                      ${step === 'personal' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>1</div>
+                      ${step === 'personal' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'}`}>1</div>
                     <span className="hidden sm:inline">Personal Info</span>
                   </div>
                 </TabsTrigger>
                 <TabsTrigger value="course" onClick={() => setStep('course')} disabled={isSubmitting || processingPayment}>
                   <div className="flex items-center">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-2
-                      ${step === 'course' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>2</div>
+                      ${step === 'course' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'}`}>2</div>
                     <span className="hidden sm:inline">Course</span>
                   </div>
                 </TabsTrigger>
                 <TabsTrigger value="payment" onClick={() => setStep('payment')} disabled={isSubmitting || processingPayment}>
                   <div className="flex items-center">
                     <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-2
-                      ${step === 'payment' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}>3</div>
+                      ${step === 'payment' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'}`}>3</div>
                     <span className="hidden sm:inline">Payment</span>
                   </div>
                 </TabsTrigger>
@@ -672,7 +690,7 @@ const RegistrationForm = () => {
                       <div className="text-center space-y-4">
                         <div className="flex justify-center">
                           <div className="animate-spin relative w-14 h-14 flex justify-center items-center">
-                            <Loader className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                            <Loader className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                           </div>
                         </div>
                         <h3 className="text-lg font-medium text-green-800 dark:text-green-300">Processing Payment</h3>
@@ -680,7 +698,7 @@ const RegistrationForm = () => {
                           Please wait while we process your payment. This should take about 30 seconds.
                         </p>
                         <div className="w-full mt-4">
-                          <Progress value={paymentProgress} className="w-full h-2" />
+                          <Progress value={paymentProgress} className="w-full h-2 bg-green-100 dark:bg-green-800/30" />
                           <div className="flex justify-between items-center mt-1">
                             <span className="text-xs text-green-600 dark:text-green-400">Starting</span>
                             <span className="text-xs text-green-600 dark:text-green-400">{Math.round(paymentProgress)}%</span>
@@ -692,12 +710,12 @@ const RegistrationForm = () => {
                   )}
 
                   <div className="space-y-4">
-                    <div className="rounded-md bg-blue-50 dark:bg-blue-900/30 p-4 border border-blue-200 dark:border-blue-800">
+                    <div className="rounded-md bg-indigo-50 dark:bg-indigo-900/30 p-4 border border-indigo-200 dark:border-indigo-800">
                       <div className="flex items-center">
-                        <CreditCard className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
-                        <h3 className="font-medium text-blue-800 dark:text-blue-300">Payment Details</h3>
+                        <CreditCard className="h-5 w-5 mr-2 text-indigo-600 dark:text-indigo-400" />
+                        <h3 className="font-medium text-indigo-800 dark:text-indigo-300">Payment Details</h3>
                       </div>
-                      <p className="mt-2 text-sm text-blue-700 dark:text-blue-400">
+                      <p className="mt-2 text-sm text-indigo-700 dark:text-indigo-400">
                         Please complete your payment using one of the bank accounts below:
                       </p>
                     </div>
@@ -706,7 +724,8 @@ const RegistrationForm = () => {
                       {bankAccounts.map((account, index) => (
                         <div
                           key={index}
-                          className="border rounded-md p-4 bg-white dark:bg-gray-800 hover:shadow-md transition-all"
+                          className="border rounded-md p-4 bg-white dark:bg-gray-800 hover:shadow-md transition-all animate-fade-in"
+                          style={{ animationDelay: `${index * 0.1}s` }}
                         >
                           <div className="flex items-start justify-between">
                             <div>
@@ -720,7 +739,7 @@ const RegistrationForm = () => {
                               type="button"
                               variant="ghost"
                               size="sm"
-                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                              className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                               onClick={() => {
                                 navigator.clipboard.writeText(account.number);
                                 toast({ description: "Account number copied to clipboard" });
@@ -736,7 +755,7 @@ const RegistrationForm = () => {
                     <div className="space-y-2">
                       <Label htmlFor="paymentMethod">Payment Method Used</Label>
                       <Select value={paymentMethod} onValueChange={setPaymentMethod} disabled={processingPayment}>
-                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                        <SelectTrigger className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                           <SelectValue placeholder="Select payment method" />
                         </SelectTrigger>
                         <SelectContent>
@@ -783,7 +802,7 @@ const RegistrationForm = () => {
                     <Button
                       type="submit"
                       disabled={!paymentMethod || isSubmitting || timerExpired || !paymentStarted || processingPayment}
-                      className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white"
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
                     >
                       {isSubmitting || processingPayment ? (
                         <div className="flex items-center">
@@ -801,7 +820,7 @@ const RegistrationForm = () => {
               
               <TabsContent value="confirmation" className="mt-0 animate-scale-up">
                 <div className="text-center py-6">
-                  <div className="h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/50 mx-auto flex items-center justify-center mb-4">
+                  <div className="h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/50 mx-auto flex items-center justify-center mb-4 animate-fade-in">
                     <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
                   </div>
                   <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Registration Complete!</h3>
@@ -813,14 +832,14 @@ const RegistrationForm = () => {
                   <div className="mt-8 space-y-4">
                     <h4 className="font-medium text-gray-800 dark:text-gray-200">Next Steps</h4>
                     <div className="grid gap-4 md:grid-cols-3">
-                      <div className="border rounded-lg p-4 bg-blue-50 dark:bg-blue-900/20 hover:shadow-md transition-all">
-                        <Calendar className="h-6 w-6 text-blue-600 dark:text-blue-400 mb-2" />
+                      <div className="border rounded-lg p-4 bg-indigo-50 dark:bg-indigo-900/20 hover:shadow-md transition-all animate-fade-in">
+                        <Calendar className="h-6 w-6 text-indigo-600 dark:text-indigo-400 mb-2" />
                         <h5 className="font-medium">Course Access</h5>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                           Check your email for course access details
                         </p>
                       </div>
-                      <div className="border rounded-lg p-4 bg-green-50 dark:bg-green-900/20 hover:shadow-md transition-all">
+                      <div className="border rounded-lg p-4 bg-green-50 dark:bg-green-900/20 hover:shadow-md transition-all animate-fade-in" style={{ animationDelay: "0.1s" }}>
                         <FileText className="h-6 w-6 text-green-600 dark:text-green-400 mb-2" />
                         <h5 className="font-medium">Receipt</h5>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -835,7 +854,7 @@ const RegistrationForm = () => {
                           {showReceipt ? 'Hide Receipt' : 'View Receipt'}
                         </Button>
                       </div>
-                      <div className="border rounded-lg p-4 bg-purple-50 dark:bg-purple-900/20 hover:shadow-md transition-all">
+                      <div className="border rounded-lg p-4 bg-purple-50 dark:bg-purple-900/20 hover:shadow-md transition-all animate-fade-in" style={{ animationDelay: "0.2s" }}>
                         <Mail className="h-6 w-6 text-purple-600 dark:text-purple-400 mb-2" />
                         <h5 className="font-medium">Support</h5>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -854,7 +873,7 @@ const RegistrationForm = () => {
                   <div className="mt-10">
                     <Button
                       onClick={() => window.location.href = '/courses'}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
+                      className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
                     >
                       Explore More Courses
                     </Button>
@@ -868,13 +887,16 @@ const RegistrationForm = () => {
             <div className="text-center w-full">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Need help? Contact our support:
-                <a href="mailto:elcoderssoftwares12@gmail.com" className="text-blue-600 dark:text-blue-400 hover:underline ml-1">
+                <a href="mailto:elcoderssoftwares12@gmail.com" className="text-indigo-600 dark:text-indigo-400 hover:underline ml-1">
                   elcoderssoftwares12@gmail.com
                 </a>
                 <span className="mx-2">|</span>
-                <a href="https://wa.me/2348088578817" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">
+                <a href="https://wa.me/2348088578817" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 hover:underline">
                   WhatsApp: 08088578817
                 </a>
+              </p>
+              <p className="text-sm text-indigo-500 dark:text-indigo-400 mt-2">
+                With ❤️ by ELCODERS SOFTWARE DEVELOPING COMPANY. FOUNDER IS C.E.O ELYON.
               </p>
             </div>
           </CardFooter>
@@ -882,25 +904,25 @@ const RegistrationForm = () => {
         
         {/* Referral Program */}
         <div className="max-w-3xl mx-auto mt-12 mb-16">
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-lg shadow-lg overflow-hidden animate-fade-in">
             <div className="p-6 md:p-8 text-white">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 animate-fade-in">🔥 Turn Your Phone into a Money Machine! 💰</h2>
-              <p className="mb-6 text-blue-100">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 animate-pulse">🔥 Turn Your Phone into a Money Machine! 💰</h2>
+              <p className="mb-6 text-indigo-100">
                 With our exclusive referral program, you can earn while you learn!
               </p>
               
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg hover:shadow-xl transition-all">
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg hover:shadow-xl transition-all animate-scale-in">
                   <h3 className="font-semibold text-xl mb-2">1️⃣ Invite a Friend</h3>
-                  <p className="text-sm text-blue-100">For every friend who registers, you earn ₦1,000 instantly!</p>
+                  <p className="text-sm text-indigo-100">For every friend who registers, you earn ₦1,000 instantly!</p>
                   <div className="mt-3 text-sm bg-white/20 p-2 rounded">
                     <span className="font-bold">Example:</span> Invite 10 friends = ₦10,000 cash!
                   </div>
                 </div>
                 
-                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg hover:shadow-xl transition-all">
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg hover:shadow-xl transition-all animate-scale-in" style={{ animationDelay: "0.1s" }}>
                   <h3 className="font-semibold text-xl mb-2">2️⃣ Keep Earning Monthly</h3>
-                  <p className="text-sm text-blue-100">When your referrals make their 2nd bi-weekly payment, you'll earn 50% of that payment EVERY MONTH!</p>
+                  <p className="text-sm text-indigo-100">When your referrals make their 2nd bi-weekly payment, you'll earn 50% of that payment EVERY MONTH!</p>
                   <div className="mt-3 text-sm bg-white/20 p-2 rounded">
                     <span className="font-bold">Example:</span> 5 friends = ₦5,000 instantly + ₦10,000 monthly
                   </div>
@@ -912,12 +934,12 @@ const RegistrationForm = () => {
                   href="https://wa.me/2348088578817?text=I'm%20interested%20in%20the%20EL%20ACCESS%20referral%20program!"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block bg-white text-indigo-700 font-bold py-3 px-6 rounded-full shadow-md hover:bg-blue-50 transition-all duration-300 hover:scale-105 transform"
+                  className="inline-block bg-white text-indigo-700 font-bold py-3 px-6 rounded-full shadow-md hover:bg-blue-50 transition-all duration-300 hover:scale-105 transform animate-pulse hover:animate-none"
                 >
                   Get Your Referral Code Now!
                 </a>
                 
-                <p className="mt-4 text-sm text-blue-100">
+                <p className="mt-4 text-sm text-indigo-100">
                   Don't miss out on this opportunity to Learn 📚, Earn 💸, and Level Up 🚀!
                 </p>
               </div>
@@ -925,6 +947,7 @@ const RegistrationForm = () => {
             
             <div className="bg-gradient-to-r from-blue-700 via-purple-700 to-indigo-700 py-3 px-6 text-center">
               <p className="text-white font-medium">Money + Education = EL ACCESS! 🔥💰📱📚</p>
+              <p className="text-white text-sm mt-1">With ❤️ by ELCODERS SOFTWARE DEVELOPING COMPANY. FOUNDER IS C.E.O ELYON.</p>
             </div>
           </div>
         </div>
